@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>PHP блог</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/main.css">
+  <?
+  $website_title = "PHP блог";
+  require_once './blocks/head.php'
+  ?>
 </head>
+
 <body>
   <?php require 'blocks/header.php'; ?>
 
   <main class="container mt-5">
     <div class="row">
       <div class="col-md-8 mb-3">
-        Основная часть сайта
+        <?
+        require_once 'mysql_connect.php';
+        $sql = 'SELECT * from `articles` ORDER BY `date` DESC';
+        $query = $pdo->query($sql);
+        while ($row = $query->fetch(PDO::FETCH_OBJ)) {
+
+        ?>
+          <h2><?= $row->title ?></h2>
+          <p><?= $row->intro ?></p>
+          <p>Автор статьи <?= $row->avtor ?></p>
+          <a href="/news.php?id=<?= $row->id ?>">
+            <button class='btn btn-warning mb-5'>Прочитать больше</button>
+          </a>
+
+        <?
+
+        }
+        ?>
       </div>
 
       <?php require 'blocks/aside.php'; ?>
@@ -24,4 +40,5 @@
 
   <?php require 'blocks/footer.php'; ?>
 </body>
+
 </html>
